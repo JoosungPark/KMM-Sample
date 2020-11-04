@@ -1,0 +1,2 @@
+com/sdop/kmmsample/android/BuildConfig.java
+ com.sdop.kmmsample.android.BuildConfig
