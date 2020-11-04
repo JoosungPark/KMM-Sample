@@ -70,6 +70,12 @@ kotlin {
         val iosTest by getting
     }
 }
+sqldelight {
+    database("AppDatabase") {
+        packageName = "com.sdop.kmmsample.shared.cache"
+    }
+}
+
 android {
     compileSdkVersion(29)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
