@@ -6,31 +6,35 @@ CREATE TABLE Launch (
     details TEXT,
     launchSuccess INTEGER AS Boolean DEFAULT NULL,
     launchDateUTC TEXT NOT NULL,
-    missionPatchUrl TEXT, articleUrl TEXT
+    missionPatchUrl TEXT,
+    articleUrl TEXT
 );
 
- CREATE TABLE Rocket (
+CREATE TABLE Rocket (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     type TEXT NOT NULL
 );
 
--- insert functions
 insertLaunch:
-INSERT INTO Launch(flightNumber, missionName, launchYear, rocketId, details, launchSuccess, launchDateUTC, missionPatchUrl, articleUrl) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO Launch(flightNumber, missionName, launchYear, rocketId, details, launchSuccess, launchDateUTC, missionPatchUrl, articleUrl)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 insertRocket:
-INSERT INTO Rocket(id, name, type) VALUES(?, ?, ?);
+INSERT INTO Rocket(id, name, type)
+VALUES(?, ?, ?);
 
--- delete functions
 removeAllLaunches:
 DELETE FROM Launch;
+
 removeAllRockets:
 DELETE FROM Rocket;
 
--- retrieve data(query)
 selectRocketById:
-SELECT * FROM Rocket WHERE id = ?;
+SELECT * FROM Rocket
+WHERE id = ?;
 
 selectAllLaunchesInfo:
-SELECT Launch.*, Rocket.* FROM Launch LEFT JOIN Rocket ON Rocket.id == Launch.rocketId;
+SELECT Launch.*, Rocket.*
+FROM Launch
+LEFT JOIN Rocket ON Rocket.id == Launch.rocketId;
