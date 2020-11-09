@@ -28,10 +28,10 @@ kotlin {
         }
     }
 
+    val ktorVersion = "1.4.0"
+    val serializationVersion = "1.0.0-RC"
     val sqlDelightVersion: String by project
     val coroutinesVersion = "1.3.9-native-mt"
-    val serializationVersion = "1.0.0-RC"
-    val ktorVersion = "1.4.0"
 
     sourceSets {
         val commonMain by getting {
@@ -43,7 +43,6 @@ kotlin {
                 implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
             }
         }
-
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
