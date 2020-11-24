@@ -7,7 +7,7 @@ buildscript {
     }
 
     val kotlinVersion = "1.4.10"
-    val gradleVersion = "4.1.0"
+    val gradleVersion = "4.1.1"
     val sqlDelightVersion: String by project
 
     dependencies {
