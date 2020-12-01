@@ -2,13 +2,72 @@ import SwiftUI
 import shared
 
 struct ContentView: View {
+    @ObservedObject private(set) var viewModel: ViewModel
+    
     var body: some View {
-        Text("test")
+        NavigationView {
+            
+            
+            listView()
+                .navigationBarTitle("SpaceX Launches")
+                .navigationBarItems(trailing: Button("Reload") {
+                    self.viewModel.loadLaunches(forceReload: true)
+                })
+        }
     }
+    
+    private func listView() -> AnyView {
+        switch viewModel.launches {
+        case .loading:
+            return AnyView(Text("Loading...").multilineTextAlignment(.center))
+        case .result(let launches):
+            return AnyView(List(launches) { launch in
+                RocketLauchRow(rocketLaunch: launch)
+                
+            })
+        case .error(let description):
+            return AnyView(Text(description).multilineTextAlignment(.center))
+        }
+    }
+}
+
+extension ContentView {
+    enum LoadableLaunches {
+        case loading
+        case result(launches: [RocketLaunch])
+        case error(description: String)
+    }
+    
+    class ViewModel: ObservableObject {
+        let sdk: SpaceXSDK
+        @Published var launches: LoadableLaunches = .loading
+        
+        init(sdk: SpaceXSDK) {
+            self.sdk = sdk
+            self.loadLaunches(forceReload: false)
+        }
+        
+        func loadLaunches(forceReload: Bool) {
+            self.launches = .loading
+            sdk.getLaunches(forceReload: forceReload) { launches, error in
+                if let launches = launches {
+                    self.launches = .result(launches: launches)
+                } else {
+                    self.launches = .error(description: error?.localizedDescription ?? "error")
+                }
+            }
+        }
+    }
+    
+    
+}
+
+extension RocketLaunch: Identifiable {
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(viewModel: .init(sdk: SpaceXSDK(databaseDriverFactory: DatabaseDriverFactory())))
     }
 }
